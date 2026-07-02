@@ -13,7 +13,6 @@
     .form-label { font-weight: 600; font-size: 0.85rem; color: #333; }
     .section-title { color: var(--primary); font-weight: 700; margin: 25px 0 15px; padding-bottom: 8px; border-bottom: 2px solid var(--primary); font-size: 1.1rem; }
     .btn-primary { background: var(--primary); border: none; padding: 12px 35px; font-weight: 600; }
-    .btn-primary:hover { background: #1c5fd1; }
     .top-bar { background: white; padding: 15px 30px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
     .top-bar h4 { margin: 0; font-weight: 700; color: var(--primary); }
     .breadcrumb { margin: 0; font-size: 0.85rem; }
@@ -40,20 +39,6 @@
       <h3 class="mb-1">Add New Product</h3>
       <p class="text-muted mb-4" style="font-size: 0.9rem;">Fill in the details below to list your product</p>
 
-      <% if (typeof error_msg !== 'undefined' && error_msg && error_msg.length > 0) { %>
-        <div class="alert alert-danger alert-dismissible fade show">
-          <%= error_msg %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-      <% } %>
-
-      <% if (typeof success_msg !== 'undefined' && success_msg && success_msg.length > 0) { %>
-        <div class="alert alert-success alert-dismissible fade show">
-          <%= success_msg %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-      <% } %>
-
       <form action="/products/seller/add" method="POST" enctype="multipart/form-data">
 
         <div class="section-title"><i class="fas fa-info-circle"></i> Basic Information</div>
@@ -70,7 +55,7 @@
 
         <div class="mb-3">
           <label class="form-label">Short Description</label>
-          <input type="text" name="shortDescription" class="form-control" placeholder="Brief description shown in product cards">
+          <input type="text" name="shortDescription" class="form-control" placeholder="Brief description">
         </div>
 
         <div class="mb-3">
@@ -83,26 +68,14 @@
             <label class="form-label">Product Type *</label>
             <select name="productType" class="form-select" required>
               <option value="">Select Type</option>
-              <% if (typeof productTypes !== 'undefined' && productTypes) { %>
-                <% productTypes.forEach(type => { %>
-                  <option value="<%= type %>"><%= type %></option>
-                <% }) %>
-              <% } else { %>
-                <option>Men</option><option>Women</option><option>Kids</option><option>Boys</option><option>Girls</option><option>Unisex</option>
-              <% } %>
+              <option>Men</option><option>Women</option><option>Kids</option>
             </select>
           </div>
           <div class="col-md-4 mb-3">
             <label class="form-label">Category *</label>
             <select name="category" class="form-select" required>
               <option value="">Select Category</option>
-              <% if (typeof categories !== 'undefined' && categories) { %>
-                <% categories.forEach(cat => { %>
-                  <option value="<%= cat %>"><%= cat %></option>
-                <% }) %>
-              <% } else { %>
-                <option>T-Shirt</option><option>Shirt</option><option>Kurta</option><option>Jeans</option><option>Other</option>
-              <% } %>
+              <option>T-Shirt</option><option>Shirt</option><option>Jeans</option>
             </select>
           </div>
           <div class="col-md-4 mb-3">
@@ -117,54 +90,25 @@
             <label class="form-label">Base Price (MRP) *</label>
             <div class="input-group">
               <span class="input-group-text">₹</span>
-              <input type="number" name="basePrice" class="form-control" required min="0" step="0.01" placeholder="999">
+              <input type="number" name="basePrice" class="form-control" required min="0" step="0.01">
             </div>
           </div>
           <div class="col-md-4 mb-3">
             <label class="form-label">Selling Price *</label>
             <div class="input-group">
               <span class="input-group-text">₹</span>
-              <input type="number" name="sellingPrice" class="form-control" required min="0" step="0.01" placeholder="799">
+              <input type="number" name="sellingPrice" class="form-control" required min="0" step="0.01">
             </div>
           </div>
           <div class="col-md-4 mb-3">
             <label class="form-label">GST Rate (%)</label>
             <select name="gstRate" class="form-select">
-              <% if (typeof gstRates !== 'undefined' && gstRates) { %>
-                <% gstRates.forEach(rate => { %>
-                  <option value="<%= rate %>" <%= rate === 5 ? 'selected' : '' %>><%= rate %>%</option>
-                <% }) %>
-              <% } else { %>
-                <option value="0">0%</option>
-                <option value="5" selected>5%</option>
-                <option value="12">12%</option>
-                <option value="18">18%</option>
-                <option value="28">28%</option>
-              <% } %>
+              <option value="0">0%</option>
+              <option value="5" selected>5%</option>
+              <option value="12">12%</option>
+              <option value="18">18%</option>
             </select>
           </div>
-        </div>
-
-        <div class="section-title"><i class="fas fa-boxes"></i> Inventory</div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Material</label>
-            <input type="text" name="material" class="form-control" placeholder="e.g. 100% Cotton, Polyester">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Weight (kg)</label>
-            <input type="number" name="weight" class="form-control" step="0.01" min="0" placeholder="0.3">
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Care Instructions</label>
-          <textarea name="careInstructions" class="form-control" rows="2" placeholder="Machine wash cold, Do not bleach, etc."></textarea>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Country of Origin</label>
-          <input type="text" name="countryOfOrigin" class="form-control" value="India">
         </div>
 
         <div class="section-title"><i class="fas fa-images"></i> Media</div>
@@ -172,35 +116,11 @@
           <div class="col-md-6 mb-3">
             <label class="form-label">Thumbnail Image *</label>
             <input type="file" name="thumbnail" class="form-control" accept="image/*" required>
-            <small class="text-muted">Main product image (square recommended)</small>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Product Images</label>
             <input type="file" name="images" class="form-control" accept="image/*" multiple>
-            <small class="text-muted">Additional images (hold Ctrl to select multiple)</small>
           </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Product Video (optional)</label>
-          <input type="file" name="video" class="form-control" accept="video/*">
-        </div>
-
-        <div class="section-title"><i class="fas fa-search"></i> SEO</div>
-        <div class="mb-3">
-          <label class="form-label">Tags (comma separated)</label>
-          <input type="text" name="tags" class="form-control" placeholder="tshirt, casual, summer, cotton">
-          <small class="text-muted">Helps customers find your product</small>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Meta Title</label>
-          <input type="text" name="metaTitle" class="form-control" placeholder="SEO title for search engines">
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Meta Description</label>
-          <textarea name="metaDescription" class="form-control" rows="2" placeholder="Short description for search results"></textarea>
         </div>
 
         <div class="d-flex gap-3 mt-4 pt-3 border-top">
