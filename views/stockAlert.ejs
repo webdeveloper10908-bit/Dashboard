@@ -9,7 +9,7 @@
   <style>
     :root { --primary: #2874f0; --warning: #f9a825; --danger: #d32f2f; --bg: #f1f3f6; }
     body { background: var(--bg); font-family: 'Segoe UI', sans-serif; }
-    .top-bar { background: white; padding: 15px 30px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .top-bar { background: white; padding: 15px 30px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
     .top-bar h4 { margin: 0; font-weight: 700; color: var(--primary); }
     .breadcrumb { margin: 0; font-size: 0.85rem; }
     .breadcrumb a { color: var(--primary); text-decoration: none; }
@@ -20,11 +20,6 @@
     .alert-info { flex: 1; }
     .alert-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 5px; }
     .alert-meta { color: #666; font-size: 0.9rem; }
-    .stock-badge { padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; }
-    .badge-out { background: #ffebee; color: #c62828; }
-    .badge-low { background: #fff8e1; color: #f57f17; }
-    .btn-restock { background: var(--primary); color: white; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
-    .btn-restock:hover { background: #1c5fd1; color: white; }
     .empty-state { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; }
     .empty-state i { font-size: 4rem; color: #4caf50; margin-bottom: 20px; }
   </style>
@@ -76,17 +71,10 @@
           <div class="alert-info">
             <div class="alert-title"><%= product.title %></div>
             <div class="alert-meta">
-              <%= product.category %> | 
-              Stock: <strong><%= product.totalStock || product.stock || product.quantity || 0 %></strong> units | 
-              Sold: <%= product.totalSales || 0 %>
+              <%= product.category %> | Stock: <strong><%= product.totalStock || product.stock || 0 %></strong> units
             </div>
           </div>
-          <div>
-            <span class="stock-badge <%= product.stockStatus === 'Out of Stock' ? 'badge-out' : 'badge-low' %>">
-              <%= product.stockStatus || 'Low Stock' %>
-            </span>
-          </div>
-          <a href="/products/seller/edit/<%= product._id %>" class="btn-restock">
+          <a href="/products/seller/edit/<%= product._id %>" class="btn btn-primary">
             <i class="fas fa-edit"></i> Update Stock
           </a>
         </div>
