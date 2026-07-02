@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popular Products - SellerHub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root { --primary: #2874f0; --bg: #f1f3f6; }
+    body { background: var(--bg); font-family: 'Segoe UI', sans-serif; }
+    .top-bar { background: white; padding: 15px 30px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .top-bar h4 { margin: 0; font-weight: 700; color: var(--primary); }
+    .breadcrumb { margin: 0; font-size: 0.85rem; }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .sort-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .sort-controls select { padding: 8px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; }
+    .product-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; margin-bottom: 15px; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+    .product-header { display: flex; gap: 15px; padding: 15px; }
+    .product-img { width: 120px; height: 120px; object-fit: cover; background: #f8f9fa; border-radius: 8px; flex-shrink: 0; }
+    .product-details { flex: 1; }
+    .product-title { font-weight: 700; font-size: 1rem; margin-bottom: 5px; color: #333; }
+    .product-meta { color: #666; font-size: 0.85rem; margin-bottom: 3px; }
+    .product-price { color: var(--primary); font-weight: 700; font-size: 1.1rem; margin: 8px 0; }
+    .product-stats { display: flex; gap: 20px; margin-top: 10px; font-size: 0.9rem; color: #666; }
+    .stat-item { display: flex; align-items: center; gap: 5px; }
+    .badge-popular { background: #fff3cd; color: #856404; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .btn-action { background: var(--primary); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+    .btn-action:hover { background: #1c5fd1; color: white; }
+    .empty-state { text-align: center; padding: 80px 20px; background: white; border-radius: 12px; }
+    .empty-state i { font-size: 4rem; color: #ccc; margin-bottom: 20px; }
+    .container { max-width: 1200px; }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div>
+      <h4>⭐ Popular Products</h4>
+      <div class="breadcrumb">
+        <a href="/seller/dashboard">Dashboard</a> / 
+        <a href="/products/seller/list">Products</a> / 
+        <span>Popular</span>
+      </div>
+    </div>
+    <div class="sort-controls">
+      <a href="/products/seller/list" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-list"></i> All Products
+      </a>
+      <a href="/products/seller/add" class="btn btn-primary btn-sm">
+        <i class="fas fa-plus"></i> Add Product
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <% if (products && products.length > 0) { %>
+      <div class="mb-4">
+        <p class="text-muted">Showing <strong><%= products.length %></strong> popular products</p>
+      </div>
+
+      <% products.forEach((product, index) => { %>
+        <div class="product-card">
+          <div class="product-header">
+            <img src="<%= product.thumbnail || '/images/no-image.png' %>" class="product-img" alt="<%= product.title %>">
+            <div class="product-details">
+              <div class="d-flex align-items-start justify-content-between mb-2">
+                <div>
+                  <div class="product-title"><%= product.title %></div>
+                  <div class="product-meta">
+                    <i class="fas fa-folder"></i> <%= product.category || 'Uncategorized' %>
+                    <% if (product.brand) { %>
+                      | <i class="fas fa-tag"></i> <%= product.brand %>
+                    <% } %>
+                  </div>
+                </div>
+                <span class="badge-popular">
+                  <i class="fas fa-fire"></i> #<%= index + 1 %>
+                </span>
+              </div>
+
+              <div class="product-price">₹<%= product.sellingPrice %></div>
+
+              <div class="product-stats">
+                <div class="stat-item">
+                  <i class="fas fa-shopping-bag" style="color: var(--primary);"></i>
+                  <strong><%= product.totalSales || 0 %></strong> sold
+                </div>
+                <div class="stat-item">
+                  <i class="fas fa-star" style="color: #ffc107;"></i>
+                  <strong><%= product.rating || 0 %></strong> rating
+                </div>
+                <div class="stat-item">
+                  <i class="fas fa-eye" style="color: #666;"></i>
+                  <strong><%= product.totalViews || 0 %></strong> views
+                </div>
+                <div class="stat-item">
+                  <i class="fas fa-box" style="color: #28a745;"></i>
+                  <strong><%= product.stock || product.totalStock || 0 %></strong> in stock
+                </div>
+              </div>
+
+              <div style="margin-top: 12px; display: flex; gap: 10px;">
+                <a href="/products/seller/edit/<%= product._id %>" class="btn-action">
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="/products/seller/<%= product._id %>" class="btn-action" style="background: #666;">
+                  <i class="fas fa-eye"></i> View
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+
+    <% } else { %>
+      <div class="empty-state">
+        <i class="fas fa-chart-line"></i>
+        <h4>No Popular Products Yet</h4>
+        <p class="text-muted">Your products will appear here as they gain sales and popularity</p>
+        <a href="/products/seller/list" class="btn btn-primary mt-3">
+          <i class="fas fa-list"></i> View All Products
+        </a>
+      </div>
+    <% } %>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
